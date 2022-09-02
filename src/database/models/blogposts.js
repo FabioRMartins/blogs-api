@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.STRING,
       published: DataTypes.DATE,
       updated: DataTypes.DATE,
-    });
+    }, { timestamps: false });
   
     return BlogPosts;
   };

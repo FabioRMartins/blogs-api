@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         through: PostCategories,
         foreignKey: "postId",
         otherKey: "categoryId",
-      });
+      }, { timestamps: false });
     };
   
     return PostCategories;
