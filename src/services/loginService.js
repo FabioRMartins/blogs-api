@@ -6,7 +6,6 @@ const login = async ({ email, password }) => {
   if (!result) {
     return null;
   }
-
   const token = tokenHelper.createToken({ email: result.email });
   return token;
 };
