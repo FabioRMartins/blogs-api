@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     );
   
     PostCategories.associate = (models) => {
-      models.BlogPosts.belongsToMany(models.BlogPosts,
+      models.BlogPost.belongsToMany(models.BlogPost,
         {
           as: "post",
           through: PostCategories,
