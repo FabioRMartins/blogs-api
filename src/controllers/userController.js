@@ -1,15 +1,13 @@
-const { createToken } = require('../helpers/token');
 const userService = require('../services/userService');
 
-const newUser = async (req, res) => {
-  try {
-    const { displayName, email, password, image } = req.body;
-    const token = createToken({ email, password });
-    await userService.newUser({ displayName, email, password, image });
-    return res.status(201).json({ token });
-  } catch (error) {
-    console.log(error);
+const createUser = async (req, res) => {
+  const token = await userService.createUser(req.body);
+
+  if (!token) {
+    return res.status(500).json({ message: 'Invalid fields' });
   }
+
+  return res.status(201).json({ token });
 };
 
-module.exports = { newUser };
+module.exports = { createUser };
