@@ -18,4 +18,12 @@ const getAllUsers = async () => {
   return users;
 };
 
-module.exports = { createUser, getAllUsers };
+const getUserById = async (id) => {
+  const result = await User.getUserById(id);
+  if (!result) {
+    return null;
+  }
+  return result;
+};
+
+module.exports = { createUser, getAllUsers, getUserById };
