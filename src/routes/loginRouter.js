@@ -4,6 +4,6 @@ const loginValidation = require('../middlewares/loginValidation');
 
 const loginRouter = Router();
 
-loginRouter.post('/', loginValidation.tokenValidation, loginController.login);
+loginRouter.post('/', loginValidation.loginValidation, loginController.login);
 
 module.exports = loginRouter;

@@ -5,7 +5,7 @@ const userSchema = joi.object({
   password: joi.string().required(),
 });
 
-const tokenValidation = (req, res, next) => {
+const loginValidation = (req, res, next) => {
   const { error } = userSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: 'Some required fields are missing' });
@@ -13,4 +13,4 @@ const tokenValidation = (req, res, next) => {
   next();
 };
 
-module.exports = { tokenValidation };
+module.exports = { loginValidation };
