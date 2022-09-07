@@ -1,39 +1,33 @@
-const Joi = require('joi');
-const { User } = require('../database/models');
+const joi = require('joi');
 
-const schema = Joi.object({
-  displayName: Joi.string().min(8).required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).lowercase().required(),
-  password: Joi.string().min(6).required(),
-  image: Joi.string().required(),
+const userSchema = joi.object().keys({
+  displayName: joi.string().min(8).required().messages({
+    'string.min': '400|"displayName" length must be at least {#limit} characters long',
+  }),
+  email: joi.string().email({ tlds: { allow: false } }).required().messages({
+    'string.email': '400|"email" must be a valid email',
+  }),
+  password: joi.string().min(6).required().messages({
+    'string.min': '400|"password" length must be at least {#limit} characters long',
+  }),
+  image: joi.string(),
 });
 
-const validation = (req, res, next) => {
-  const result = schema.validate(req.body);
+const validation = (user) => {
+  const result = userSchema.validate(user);
+  return result;
+};
 
-  if (result.error) {
-    const [{ message }] = result.error.details;
-    return res.status(400).json({ message });
+const userValidation = (req, res, next) => {
+  const user = req.body;
+  const { error } = validation(user);
+
+  if (error) {
+    const [code, message] = error.message.split('|');
+    return res.status(Number(code)).json({ message });
   }
 
   next();
 };
 
-const userValidation = async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const result = await User.findOne({ where: { email } });
-
-    if (result) {
-    throw new Error('User already registered');
-    }
-    next();
-  } catch (error) {
-    return res.status(409).json({ message: error.message });
-  }
-};
-
-module.exports = [
-  validation,
-  userValidation,
-];
+module.exports = { userValidation };

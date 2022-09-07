@@ -1,13 +1,11 @@
-const { Router } = require('express');
+const express = require('express');
+
 const categoriesController = require('../controllers/categoriesController');
-const validation = require('../middlewares/categoriesValidation');
-const { tokenValidation } = require('../middlewares/auth');
+const tokenValidation = require('../middlewares/tokenValidation');
 
-const categoriesRouter = Router();
+const route = express.Router();
 
-categoriesRouter.post(
-    '/', tokenValidation, validation, categoriesController.createCategories,
-);
-categoriesRouter.get('/', tokenValidation, categoriesController.getAllCategories);
+route.post('/', tokenValidation.tokenValidation, categoriesController.createCategories);
+route.get('/', tokenValidation.tokenValidation, categoriesController.getAllCategories);
 
-module.exports = categoriesRouter;
+module.exports = route;

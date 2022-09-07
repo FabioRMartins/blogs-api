@@ -1,12 +1,13 @@
 const express = require('express');
-const validation = require('../middlewares/userValidation');
+
 const userController = require('../controllers/userController');
-const { tokenValidation } = require('../middlewares/auth');
+const userValidation = require('../middlewares/userValidation');
+const tokenValidation = require('../middlewares/tokenValidation');
 
-const router = express.Router();
+const route = express.Router();
 
-router.post('/', validation, userController.createUser);
-router.get('/', tokenValidation, userController.getAllUsers);
-router.get('/:id', tokenValidation, userController.getUserById);
+route.post('/', userValidation.userValidation, userController.createUser);
+route.get('/', tokenValidation.tokenValidation, userController.getAllUsers);
+route.get('/:id', tokenValidation.tokenValidation, userController.getUserById);
 
-module.exports = router;
+module.exports = route;
