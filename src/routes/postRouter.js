@@ -9,5 +9,6 @@ const route = express.Router();
 route.post('/', tokenValidation.tokenValidation,
  postValidation.postValidation, postController.createPost);
  route.get('/', tokenValidation.tokenValidation, postController.getAllPosts);
+ route.get('/:id', tokenValidation.tokenValidation, postController.getPostById);
 
 module.exports = route;

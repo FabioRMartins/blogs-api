@@ -26,10 +26,8 @@ const createPost = async ({ title, content, categoryIds, userId }) => {
       categoryId: id,
     }));
     await PostCategory.bulkCreate(postCategories, { action });
-
     return newPost;
   });
-
   return transaction;
 };
 
@@ -40,8 +38,17 @@ const getAllPosts = async () => {
       { model: Category, as: 'categories' },
     ],
   });
-
   return posts;
 };
 
-module.exports = { createPost, consultCategories, getAllPosts };
+const getPostById = async (id) => {
+  const result = await BlogPost.findByPk(id, {
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+  return result;
+};
+
+module.exports = { createPost, consultCategories, getAllPosts, getPostById };
