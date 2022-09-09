@@ -21,4 +21,13 @@ const getUserById = async (req, res) => {
     return res.status(200).json(result);
 };
 
-module.exports = { createUser, getAllUsers, getUserById };
+const removeUser = async (req, res) => {
+  const { userId } = req;
+  const result = await userService.removeUser({ userId });
+  if (!result) {
+     return res.status(401).json({ message: 'Unauthorized user' });
+  }
+  return res.status(204).end();
+};
+
+module.exports = { createUser, getAllUsers, getUserById, removeUser };

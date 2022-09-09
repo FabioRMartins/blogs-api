@@ -47,9 +47,23 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async (id) => {
-  const result = await User.findByPk(id, { attributes: { exclude: ['password'] } });
-  if (!result) return null;
+  const result = await User.findByPk(id, {
+    attributes: { exclude: ['password'] },
+  });
+  if (!result) {
+    return null;
+  }
   return result;
+};
+
+const removeUser = async ({ userId }) => {
+  const id = userId;
+  const result = await User.findByPk(id);
+  if (!result) {
+    return null;
+  }
+  await User.destroy({ where: { id } });
+  return true;
 };
 
 module.exports = {
@@ -59,4 +73,5 @@ module.exports = {
   createUser,
   getAllUsers,
   getUserById,
+  removeUser,
 };
