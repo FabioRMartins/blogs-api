@@ -56,19 +56,33 @@ const updatePost = async ({ title, content, userId, id }) => {
   if (post.userId !== userId) {
     return null;
   }
-    await BlogPost.update({ title, content }, { where: { id } });
+  await BlogPost.update({ title, content }, { where: { id } });
   const updatedPost = await BlogPost.findByPk(id,
-    { include: [{
-      model: User, 
-      as: 'user',
-      attributes: { exclude: ['password'] },
-    }, {
-      model: Category, 
-      as: 'categories',
-    }],
+     { include: [{
+        model: User,
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      }, {
+        model: Category,
+        as: 'categories',
+      },
+    ],
   });
-
   return updatedPost;
 };
 
-module.exports = { createPost, consultCategories, getAllPosts, getPostById, updatePost };
+const removePost = async (id) => {
+  const post = await getPostById(id);
+  if (!post) return false;
+  await BlogPost.destroy({ where: { id } });
+  return true;
+};
+
+module.exports = {
+  createPost,
+  consultCategories,
+  getAllPosts,
+  getPostById,
+  updatePost,
+  removePost,
+};
