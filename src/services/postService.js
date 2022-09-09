@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 const {
   BlogPost,
   Category,
@@ -6,6 +8,22 @@ const {
   sequelize,
 } = require('../database/models');
 const CustomError = require('../errors/CustomError');
+
+const getPostByTerm = async (q) => {
+  const search = await BlogPost.findAll({
+    include: [{
+      model: User,
+      as: 'user',
+      attributes: { exclude: ['password'] },
+    },
+    {
+      model: Category,
+      as: 'categories',
+    }], 
+    where: { [Op.or]: [{ title: { [Op.like]: `%${q}%` } }, { content: { [Op.like]: `%${q}%` } }] },
+  });
+  return search;
+};
 
 const consultCategories = async (id) => {
   const existingPost = await Category.findByPk(id);
@@ -85,4 +103,5 @@ module.exports = {
   getPostById,
   updatePost,
   removePost,
+  getPostByTerm,
 };

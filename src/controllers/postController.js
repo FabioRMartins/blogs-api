@@ -1,5 +1,11 @@
 const postService = require('../services/postService');
 
+const getPostByTerm = async (req, res) => {
+  const { q } = req.query;
+  const result = await postService.getPostByTerm(q);
+  return res.status(200).json(result);
+};
+
 const createPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
   const result = await postService.createPost({
@@ -45,4 +51,4 @@ const removePost = async (req, res) => {
     return res.status(204).end();
 };
 
-module.exports = { createPost, getAllPosts, getPostById, updatePost, removePost };
+module.exports = { createPost, getAllPosts, getPostById, updatePost, removePost, getPostByTerm };
